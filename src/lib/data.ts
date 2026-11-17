@@ -4,7 +4,7 @@
 // Extra events/news are dated after the reference ones so the countdown and
 // "next event" logic stay consistent. No invented attendance or testimonials.
 
-export const SITE_URL = 'https://nightclub.pages.dev'; // placeholder origin until Dus picks a domain
+export const SITE_URL = 'https://nights-club.pages.dev'; // Cloudflare Pages project nights-club
 export const SITE_NAME = 'Night Club';
 export const ADDRESS = '4578 Marmora Road, Glasgow D04 89GR';
 export const PHONE = '(800) 2345-6789';

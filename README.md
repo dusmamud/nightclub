@@ -35,14 +35,14 @@ npm run build   # static output in build/
 
 ## Deploy
 
-Cloudflare Pages project `nightclub` (→ `nightclub.pages.dev`), via
+Cloudflare Pages project `nights-club` (→ `nights-club.pages.dev`), via
 `.github/workflows/deploy-cloudflare-pages.yml` on every push to `main`.
 Required GitHub secrets (repo → Settings → Secrets and variables → Actions):
 
 - `CLOUDFLARE_API_TOKEN` — Pages:Edit + Account:Read
 - `CLOUDFLARE_ACCOUNT_ID` — from the Cloudflare dashboard
 
-Note: `SITE_URL` in `src/lib/data.ts` is still the placeholder
-`https://nightclub.pages.dev` — replace it if a real domain is chosen.
+Note: `SITE_URL` in `src/lib/data.ts` is
+`https://nights-club.pages.dev` — replace it if a real domain is chosen.
 The contact form is client-side only until a backend exists; the map on
 `/contacts/` is a placeholder.
