@@ -284,3 +284,229 @@ export const OPENING_HOURS: { days: string; hours: string }[] = [
 	{ days: 'Saturday', hours: '21:00 – 04:00' },
 	{ days: 'Sunday – Wednesday', hours: 'Closed' }
 ];
+
+// --- Round 2 data -----------------------------------------------------------
+// PLACEHOLDER DATA — every value below is invented until Dus supplies the real
+// venue facts: DJ names/bios, table minimums and deposits, drink and bottle
+// prices, dress code, refund policy, accessibility and parking details.
+// Do not treat any of it as the club's real information.
+
+// Resident DJs (placeholder names — Dus to supply the real lineup).
+export type DjItem = {
+	slug: string;
+	name: string;
+	genre: string;
+	image: string;
+	imageAlt: string;
+	bio: string;
+};
+
+export const DJS: DjItem[] = [
+	{
+		slug: 'dj-nova',
+		name: 'DJ Nova',
+		genre: 'House & disco',
+		image: '/images/gallery-djbooth.jpg',
+		imageAlt: 'DJ Nova at the booth',
+		bio: 'Our Friday resident. House and disco built for the floor — long blends, mirror-ball moments, and a closing set that runs until dawn.'
+	},
+	{
+		slug: 'dj-pulse',
+		name: 'DJ Pulse',
+		genre: 'Techno & peak-time',
+		image: '/images/gallery-lights.jpg',
+		imageAlt: 'DJ Pulse under the lights',
+		bio: 'Our Saturday resident. Peak-time techno and driving bass — the loudest hours of the week, from midnight until the lights come up.'
+	},
+	{
+		slug: 'dj-luna',
+		name: 'DJ Luna',
+		genre: 'R&B & hip-hop',
+		image: '/images/gallery-crowd.jpg',
+		imageAlt: 'DJ Luna playing to the crowd',
+		bio: 'Our midweek resident. R&B, hip-hop and party classics — the warm-up that turns into the main event.'
+	}
+];
+
+// Which resident plays which event (placeholder mapping).
+export const EVENT_DJS: Record<string, string> = {
+	'lorem-ipsum-dolor-sit-amet-conse': 'dj-nova',
+	'excepteur-sint-occaecat-cupidatat': 'dj-pulse',
+	'sunt-in-culpa-qui-officia': 'dj-luna',
+	'neon-nights-disco-revival': 'dj-nova',
+	'dj-takeover-friday': 'dj-pulse',
+	'friends-night-out': 'dj-luna',
+	'dance-until-dawn': 'dj-nova',
+	'vip-lounge-saturday': 'dj-pulse',
+	'cocktail-masterclass': 'dj-luna'
+};
+
+export function djForEvent(slug: string): DjItem | undefined {
+	const djSlug = EVENT_DJS[slug];
+	return DJS.find((d) => d.slug === djSlug);
+}
+
+export function eventsForDj(djSlug: string): EventItem[] {
+	return EVENTS.filter((e) => EVENT_DJS[e.slug] === djSlug);
+}
+
+// VIP table tiers (placeholder minimums/deposits — Dus to supply real prices).
+export type TableTier = {
+	slug: string;
+	name: string;
+	minimum: string;
+	seats: string;
+	deposit: string;
+	perks: string[];
+};
+
+export const TABLE_TIERS: TableTier[] = [
+	{
+		slug: 'standard-table',
+		name: 'Standard table',
+		minimum: 'From $150',
+		seats: 'Up to 6 guests',
+		deposit: '$50 deposit',
+		perks: ['Reserved table by the floor', 'Table service all night', 'Free cloakroom']
+	},
+	{
+		slug: 'vip-booth',
+		name: 'VIP booth',
+		minimum: 'From $300',
+		seats: 'Up to 8 guests',
+		deposit: '$100 deposit',
+		perks: ['Booth with a view over the floor', 'Dedicated host', 'Priority entry lane']
+	},
+	{
+		slug: 'premium-lounge',
+		name: 'Premium lounge',
+		minimum: 'From $500',
+		seats: 'Up to 12 guests',
+		deposit: '$150 deposit',
+		perks: ['Private lounge area', 'Bottle package included', 'Dedicated host & security']
+	}
+];
+
+// Drinks & bottle menu (placeholder prices — Dus to supply the real menu).
+export type DrinkItem = { name: string; price: string; desc: string };
+
+export const COCKTAILS: DrinkItem[] = [
+	{ name: 'House Margarita', price: '$12', desc: 'Tequila, lime, agave — served on the rocks.' },
+	{ name: 'Pink Club Spritz', price: '$13', desc: 'Gin, pink grapefruit, prosecco, soda.' },
+	{ name: 'Espresso Martini', price: '$14', desc: 'Vodka, espresso, coffee liqueur.' },
+	{ name: 'Old Fashioned', price: '$14', desc: 'Bourbon, bitters, orange, demerara.' },
+	{ name: 'Mojito', price: '$12', desc: 'White rum, mint, lime, soda.' },
+	{ name: 'Negroni', price: '$13', desc: 'Gin, Campari, sweet vermouth.' }
+];
+
+export const BOTTLES: DrinkItem[] = [
+	{ name: 'House vodka', price: 'From $120', desc: 'Bottle service with mixers for the table.' },
+	{ name: 'House gin', price: 'From $130', desc: 'Bottle service with tonic and garnish.' },
+	{ name: 'Prosecco', price: 'From $60', desc: 'Chilled bottle, served at the table.' },
+	{ name: 'Champagne', price: 'From $180', desc: 'Bottle service for the big nights.' }
+];
+
+// FAQ / entry policy (placeholder policy wording — Dus to confirm the real rules).
+export type FaqItem = { q: string; a: string };
+
+export const FAQS: FaqItem[] = [
+	{
+		q: 'How old do I need to be, and what ID do I need?',
+		a: '18+ only, every night. Bring a valid photo ID — passport, driving licence or national ID card. No ID, no entry, even with a ticket. Student cards and photos of ID are not accepted.'
+	},
+	{
+		q: 'Is there a dress code?',
+		a: 'Smart night-out dress. No sportswear, no trainers, no caps. The door team has the final say — if in doubt, dress up rather than down.'
+	},
+	{
+		q: 'What time do the doors open?',
+		a: 'Doors open at 21:00 on Thursday, Friday and Saturday. Last entry is 01:00. The floor runs until 03:00 on Thursday and Friday, and until 04:00 on Saturday.'
+	},
+	{
+		q: 'Can I get a refund on my ticket?',
+		a: 'Tickets are non-refundable, but they can be transferred to another person up to 24 hours before the night. If we cancel a night, every ticket is refunded in full.'
+	},
+	{
+		q: 'How does the guestlist work?',
+		a: 'Pick a night on the guestlist page, leave your name and phone number, and turn up before 23:00. Your name is on the list at the door — no ticket needed, but entry is still 18+ with ID and subject to capacity.'
+	},
+	{
+		q: 'How do table bookings and deposits work?',
+		a: 'Pick a table tier on the VIP page and send a booking request. A deposit holds your table — it comes off your minimum spend on the night. If you cancel more than 48 hours ahead, the deposit is refunded.'
+	},
+	{
+		q: 'What if I feel unsafe or unwell?',
+		a: 'Tell any member of staff, or go to the bar and ask for Angela — that is our code word for help, and staff will look after you discreetly. Trained welfare staff are on the floor every night, and there is a quiet room if you need a break.'
+	},
+	{
+		q: 'Is the club accessible?',
+		a: 'The main entrance is step-free and there is an accessible toilet on the ground floor. The VIP mezzanine is reached by stairs only. Tell us in advance on the contact form and we will reserve a ground-floor table.'
+	}
+];
+
+// Rooms / areas (photo + two lines each).
+export type RoomItem = { name: string; image: string; imageAlt: string; desc: string };
+
+export const ROOMS: RoomItem[] = [
+	{
+		name: 'The dance floor',
+		image: '/images/gallery-dancefloor.jpg',
+		imageAlt: 'Crowd dancing on the main dance floor',
+		desc: 'The heart of the club. Mirror ball overhead, lights on the rig, and the floor stays open until dawn.'
+	},
+	{
+		name: 'VIP lounge',
+		image: '/images/gallery-vip.jpg',
+		imageAlt: 'VIP lounge seating with low warm light',
+		desc: 'Reserved booths and lounge seating with table service and a view over the whole floor.'
+	},
+	{
+		name: 'The bar',
+		image: '/images/gallery-cocktails.jpg',
+		imageAlt: 'Cocktails lined up on the bar',
+		desc: 'House pours, classics and bottle service. Order at the bar or from your table.'
+	}
+];
+
+// Ticket tiers per event, derived from the event's "From $…" price.
+// Placeholder pricing — Dus to confirm real ticket prices and the ticket platform.
+export type TicketTier = { name: string; price: string; note: string };
+
+export function ticketTiers(event: EventItem): TicketTier[] {
+	const base = parseInt(event.price.replace(/[^0-9]/g, ''), 10) || 20;
+	return [
+		{ name: 'Early bird', price: `$${Math.max(10, base - 10)}`, note: 'Limited — first release, entry before 23:00.' },
+		{ name: 'General admission', price: event.price, note: 'Standard entry, any time until last entry 01:00.' },
+		{ name: 'VIP entry', price: `$${base * 2 + 10}`, note: 'Priority entry lane and cloakroom included.' }
+	];
+}
+
+// Live open-now state from the opening-hours table (Thu–Fri 21:00–03:00, Sat 21:00–04:00).
+export function getOpenState(now = new Date()): { open: boolean; label: string } {
+	const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const closeHour = (day: number) => (day === 6 ? 4 : 3); // Saturday night closes 04:00
+	const windows: { start: Date; end: Date }[] = [];
+	for (let d = -1; d <= 8; d++) {
+		const date = new Date(now);
+		date.setDate(now.getDate() + d);
+		const day = date.getDay();
+		if (day !== 4 && day !== 5 && day !== 6) continue;
+		const start = new Date(date);
+		start.setHours(21, 0, 0, 0);
+		const end = new Date(date);
+		end.setDate(date.getDate() + 1);
+		end.setHours(closeHour(day), 0, 0, 0);
+		windows.push({ start, end });
+	}
+	for (const w of windows) {
+		if (now >= w.start && now < w.end) {
+			return { open: true, label: `Open now · closes ${String(w.end.getHours()).padStart(2, '0')}:00` };
+		}
+	}
+	const next = windows.find((w) => w.start > now);
+	if (next) {
+		const dayName = dayNames[next.start.getDay()];
+		return { open: false, label: `Closed · opens ${dayName} at 21:00` };
+	}
+	return { open: false, label: 'Closed' };
+}

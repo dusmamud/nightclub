@@ -21,7 +21,7 @@
 	</p>
 	<div class="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-x-10 md:gap-y-12">
 		{#each NEWS as item, i (item.slug)}
-			<div class="reveal" use:reveal style="transition-delay: {(i % 2) * 120}ms">
+			<div class="reveal" use:reveal style="transition-delay: {(i % 2) * 60}ms">
 				<NewsCard {item} />
 			</div>
 		{/each}

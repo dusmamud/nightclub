@@ -77,6 +77,79 @@
 	.group:hover .badge-pop {
 		transform: scale(1.08) rotate(-4deg);
 	}
+	/* Hero entrance: one load-time sequence, staggered by --d, total stagger
+	   capped ~500ms. Only transform + opacity. */
+	@keyframes hero-rise {
+		from {
+			opacity: 0;
+			transform: translateY(18px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.hero-enter {
+		animation: hero-rise 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+		animation-delay: var(--d, 0ms);
+		will-change: opacity, transform;
+	}
+	/* Image fade-in on load: img starts transparent, .img-loaded flips it in.
+	   Used above the fold so a slow image never reads as a black hole. */
+	.img-fade {
+		opacity: 0;
+		transition: opacity 0.4s ease;
+	}
+	.img-fade.img-loaded {
+		opacity: 1;
+	}
+	/* Button press feedback: transform only, 100–150ms. */
+	.btn-press {
+		transition:
+			transform 0.12s cubic-bezier(0.2, 0, 0, 1),
+			background-color 0.15s ease,
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+	.btn-press:active {
+		transform: scale(0.98);
+	}
+	/* Nav link underline sweep. */
+	.nav-link {
+		position: relative;
+	}
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		bottom: -4px;
+		left: 0;
+		height: 2px;
+		background: var(--color-pink);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+	}
+	.nav-link:hover::after,
+	.nav-link[aria-current='page']::after {
+		transform: scaleX(1);
+	}
+	/* Upcoming-nights ticker: decorative marquee, transform only. */
+	@keyframes ticker-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+	.ticker-track {
+		animation: ticker-scroll 36s linear infinite;
+		will-change: transform;
+	}
+	.ticker:hover .ticker-track {
+		animation-play-state: paused;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -94,6 +167,22 @@
 		transition: none;
 		transform: none;
 		box-shadow: none;
+	}
+	.hero-enter {
+		animation: none;
+	}
+	.img-fade {
+		opacity: 1;
+		transition: none;
+	}
+	.btn-press:active {
+		transform: none;
+	}
+	.nav-link::after {
+		transition: none;
+	}
+	.ticker-track {
+		animation: none;
 	}
 	* {
 		animation-duration: 0.01ms !important;

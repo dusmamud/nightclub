@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fly } from 'svelte/transition';
+	import { page } from '$app/state';
 	import '../app.css';
 	import '@fontsource/anton/400.css';
 	import '@fontsource/oswald/400.css';
@@ -7,10 +9,17 @@
 	import '@fontsource/oswald/700.css';
 	import Header from '#lib/components/Header.svelte';
 	import Footer from '#lib/components/Footer.svelte';
+	import StickyCta from '#lib/components/StickyCta.svelte';
+	import { motionDuration } from '#lib/motion';
 	import { SITE_URL } from '#lib/data';
 	import type { LayoutProps } from './$types';
 
 	let { children }: LayoutProps = $props();
+
+	// Route transition key — a fresh fade/slide per navigation, gated on
+	// prefers-reduced-motion (Svelte transitions run on WAAPI, CSS can't stop them).
+	let key = $derived(page.url.pathname);
+
 
 	const jsonLd = {
 		'@context': 'https://schema.org',
@@ -47,7 +56,15 @@
 <Header />
 
 <main id="main-content">
-	{@render children()}
+	{#key key}
+		<div in:fly={{ y: 14, duration: motionDuration(350) }}>
+			{@render children()}
+		</div>
+	{/key}
 </main>
 
 <Footer />
+
+<!-- Spacer so the sticky mobile CTA never covers the footer. -->
+<div class="h-[4.5rem] md:hidden" aria-hidden="true"></div>
+<StickyCta />

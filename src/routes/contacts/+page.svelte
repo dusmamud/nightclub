@@ -1,11 +1,16 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
-	import { ADDRESS, OPENING_HOURS, PHONE, PHONE_HREF } from '#lib/data';
+	import { ADDRESS, OPENING_HOURS, PHONE, PHONE_HREF, getOpenState } from '#lib/data';
 	import MapPin from '@lucide/svelte/icons/map-pin';
 	import Phone from '@lucide/svelte/icons/phone';
 	import Clock from '@lucide/svelte/icons/clock';
 	import Mail from '@lucide/svelte/icons/mail';
+	import Accessibility from '@lucide/svelte/icons/accessibility';
+	import Car from '@lucide/svelte/icons/car';
+	import ShieldCheck from '@lucide/svelte/icons/shield-check';
+
+	const openState = getOpenState();
 
 	let name = $state('');
 	let email = $state('');
@@ -63,11 +68,44 @@
 				<span class="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-pink text-white"><Clock size={22} aria-hidden="true" /></span>
 				<div>
 					<h2 class="font-condensed font-bold tracking-widest uppercase">Opening hours</h2>
-					<dl class="mt-1 space-y-1 text-sm text-neutral-300">
+					<p class="mt-1 text-sm font-semibold {openState.open ? 'text-pink' : 'text-neutral-300'}" role="status">
+						{openState.label}
+					</p>
+					<dl class="mt-2 space-y-1 text-sm text-neutral-300">
 						{#each OPENING_HOURS as row (row.days)}
 							<div class="flex justify-between gap-6"><dt>{row.days}</dt><dd>{row.hours}</dd></div>
 						{/each}
 					</dl>
+				</div>
+			</div>
+			<div class="flex items-start gap-4">
+				<span class="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-pink text-white"><Accessibility size={22} aria-hidden="true" /></span>
+				<div>
+					<h2 class="font-condensed font-bold tracking-widest uppercase">Accessibility</h2>
+					<p class="mt-1 text-sm leading-relaxed text-neutral-300">
+						Step-free main entrance and an accessible toilet on the ground floor. The VIP mezzanine is
+						reached by stairs only — tell us in advance and we will reserve a ground-floor table.
+					</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-4">
+				<span class="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-pink text-white"><Car size={22} aria-hidden="true" /></span>
+				<div>
+					<h2 class="font-condensed font-bold tracking-widest uppercase">Parking &amp; transport</h2>
+					<p class="mt-1 text-sm leading-relaxed text-neutral-300">
+						Street parking on Marmora Road and a car park two minutes away. Licensed taxis pick up
+						outside the door; the nearest bus stop is on Marmora Road.
+					</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-4">
+				<span class="flex min-h-11 min-w-11 items-center justify-center rounded-full bg-pink text-white"><ShieldCheck size={22} aria-hidden="true" /></span>
+				<div>
+					<h2 class="font-condensed font-bold tracking-widest uppercase">Safety</h2>
+					<p class="mt-1 text-sm leading-relaxed text-neutral-300">
+						Welfare staff are on the floor every night. Ask for Angela at the bar if you need help —
+						<a href="/faq/" class="text-pink hover:text-white">full safety notes on the FAQ page</a>.
+					</p>
 				</div>
 			</div>
 			<div class="flex items-start gap-4">

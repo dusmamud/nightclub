@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Newsletter from '#lib/components/Newsletter.svelte';
 	import { ADDRESS, PHONE, PHONE_HREF } from '#lib/data';
 </script>
 
@@ -13,8 +14,14 @@
 		class="absolute inset-0 h-full w-full object-cover grayscale"
 	/>
 	<div class="absolute inset-0 bg-black/75"></div>
-	<div class="relative mx-auto w-full max-w-[780px] px-4 py-10 md:py-14">
-		<div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+	<div class="relative mx-auto w-full max-w-[780px] px-4 py-8 md:py-10">
+		<div class="border-b border-white/10 pb-6">
+			<p class="font-condensed text-sm font-semibold tracking-[0.25em] text-pink uppercase">Newsletter</p>
+			<div class="mt-3 max-w-[34rem]">
+				<Newsletter idPrefix="footer-newsletter" />
+			</div>
+		</div>
+		<div class="mt-6 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
 			<div>
 				<p class="font-display text-[2.4rem] leading-none tracking-wide md:text-[3rem]">
 					<span class="text-white">NIGHT</span><span class="text-pink">CLUB</span>
@@ -33,9 +40,14 @@
 				<nav aria-label="Footer" class="mt-4">
 					<ul class="flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
 						<li><a href="/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">HOME</a></li>
+						<li><a href="/events/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">EVENTS</a></li>
+						<li><a href="/vip/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">VIP</a></li>
+						<li><a href="/djs/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">DJS</a></li>
+						<li><a href="/drinks/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">DRINKS</a></li>
 						<li><a href="/about/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">ABOUT</a></li>
 						<li><a href="/gallery/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">GALLERY</a></li>
 						<li><a href="/news/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">NEWS</a></li>
+						<li><a href="/faq/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">FAQ</a></li>
 						<li><a href="/contacts/" class="font-condensed text-sm font-semibold tracking-widest text-neutral-300 hover:text-pink">CONTACTS</a></li>
 					</ul>
 				</nav>

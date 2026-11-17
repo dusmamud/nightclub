@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { EventItem } from '#lib/data';
 
-	let { event }: { event: EventItem } = $props();
+	let { event, priority = false }: { event: EventItem; priority?: boolean } = $props();
+
+	// Fade-in on load over a dark placeholder, so a slow image never renders
+	// as a black hole. Above-the-fold (hero) images are eager.
+	let loaded = $state(false);
 </script>
 
 <article class="group card-lift flex flex-col items-center text-center">
@@ -12,15 +16,21 @@
 			<span class="text-[1.6rem] font-bold md:text-[1.9rem]">{event.day}</span>
 			<span class="text-[0.95rem] font-semibold tracking-wider">{event.month}</span>
 		</span>
-		<img
-			src={event.image}
-			alt={event.imageAlt}
-			width="1600"
-			height="1600"
-			loading="lazy"
-			decoding="async"
-			class="aspect-square w-[15rem] rounded-full object-cover md:w-[16.5rem]"
-		/>
+		<span class="block overflow-hidden rounded-full bg-[#232323]">
+			<img
+				src={event.image}
+				alt={event.imageAlt}
+				width="1600"
+				height="1600"
+				loading={priority ? 'eager' : 'lazy'}
+				fetchpriority={priority ? 'high' : undefined}
+				decoding="async"
+				onload={() => (loaded = true)}
+				class="img-fade aspect-square w-[13rem] rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[13.25rem] {loaded
+					? 'img-loaded'
+					: ''}"
+			/>
+		</span>
 	</a>
 	<h3 class="mt-5">
 		<a
@@ -30,10 +40,10 @@
 			{event.title}
 		</a>
 	</h3>
-	<p class="mt-3 max-w-[19rem] text-[0.82rem] leading-relaxed text-neutral-400">
+	<p class="mt-3 max-w-[21rem] text-[0.82rem] leading-relaxed text-neutral-400">
 		{event.excerpt}
 	</p>
-	<p class="mt-3 font-condensed text-sm font-semibold tracking-widest text-neutral-300">
+	<p class="mt-2 font-condensed text-sm font-semibold tracking-widest text-neutral-300">
 		{event.time} · {event.price} · 18+
 	</p>
 </article>

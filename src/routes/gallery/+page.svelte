@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { fade, scale } from 'svelte/transition';
+	import { motionDuration } from '#lib/motion';
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
 	import { GALLERY } from '#lib/data';
@@ -90,7 +91,7 @@
 				aria-label="View photo: {item.caption}"
 				onclick={(e) => open(i, e.currentTarget)}
 			>
-				<span class="reveal block" use:reveal style="transition-delay: {(i % 3) * 100}ms">
+				<span class="reveal block" use:reveal style="transition-delay: {(i % 3) * 50}ms">
 					<img
 						src={item.src}
 						alt={item.alt}
@@ -118,7 +119,7 @@
 		aria-modal="true"
 		aria-label="Photo viewer: {current.caption}"
 		class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4"
-		transition:fade={{ duration: 200 }}
+		transition:fade={{ duration: motionDuration(200) }}
 	>
 		<button
 			type="button"
@@ -137,7 +138,7 @@
 		>
 			<ChevronLeft size={28} aria-hidden="true" />
 		</button>
-		<figure class="max-h-full max-w-3xl">
+		<figure class="max-h-full max-w-3xl" in:scale={{ duration: motionDuration(220), start: 0.96, opacity: 0 }}>
 			<img
 				src={current.src}
 				alt={current.alt}

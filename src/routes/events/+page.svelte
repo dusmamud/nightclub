@@ -46,8 +46,8 @@
 	</p>
 
 	<div class="mt-8 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-3 md:gap-x-6 md:gap-y-14">
-		{#each shown as event (event.slug)}
-			<div class="reveal" use:reveal>
+		{#each shown as event, i (event.slug)}
+			<div class="reveal" use:reveal style="transition-delay: {(i % 3) * 50}ms">
 				<EventCard {event} />
 			</div>
 		{/each}
