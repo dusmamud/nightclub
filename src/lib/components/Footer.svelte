@@ -24,6 +24,8 @@
 <footer class="relative overflow-hidden">
 	<img
 		src="/images/footer-crowd.jpg"
+		srcset="/images/footer-crowd-400.jpg 400w, /images/footer-crowd-800.jpg 800w, /images/footer-crowd-1200.jpg 1200w, /images/footer-crowd.jpg 1600w"
+		sizes="100vw"
 		alt=""
 		width="1920"
 		height="1280"

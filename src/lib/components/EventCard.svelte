@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { tilt } from '#lib/actions/tilt';
+	import { srcsetFor } from '#lib/images';
 	import type { EventItem } from '#lib/data';
 
 	let { event, priority = false }: { event: EventItem; priority?: boolean } = $props();
@@ -26,6 +27,8 @@
 		<span class="block overflow-hidden rounded-full bg-[#232323]">
 			<img
 				src={event.image}
+				srcset={srcsetFor(event.image)}
+				sizes="(min-width: 768px) 212px, 208px"
 				alt={event.imageAlt}
 				width="1600"
 				height="1600"
@@ -36,14 +39,19 @@
 			/>
 		</span>
 	</a>
-	<h3 class="mt-5">
+	<!-- h2, not h3: on Home these cards sit directly under the sr-only h1, so
+	     h3 skipped a level (axe heading-order); on /events/ they sit under an
+	     h2, where h2 is a valid sibling. The h3 carried only `mt-5` — all text
+	     styling is on the inner <a> — and Tailwind preflight resets h2/h3
+	     identically, so the tag change is visually identical. -->
+	<h2 class="mt-5">
 		<a
 			href="/events/{event.slug}/"
 			class="inline-block bg-black/90 px-3 py-1.5 font-condensed text-[0.95rem] leading-tight font-semibold tracking-wide text-white uppercase transition-colors hover:text-pink md:text-base"
 		>
 			{event.title}
 		</a>
-	</h3>
+	</h2>
 	<p class="mt-3 max-w-[22rem] text-[0.78rem] leading-relaxed text-neutral-400">
 		{event.excerpt}
 	</p>

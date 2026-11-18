@@ -1,12 +1,45 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import EventCard from '#lib/components/EventCard.svelte';
-	import { DJS, eventsForDj } from '#lib/data';
+	import { DJS, SITE_URL, eventsForDj } from '#lib/data';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const dj = DJS.find((d) => d.slug === data.slug)!;
 	const upcoming = eventsForDj(dj.slug);
+
+	// Person JSON-LD — solo DJ, not MusicGroup. Fields mirror the visible
+	// page exactly; performerIn is the page's own "Upcoming nights" list.
+	// No sameAs: the page states no links are shown until they are real.
+	// No genre: Person has no genre property (it already appears in the bio).
+	// NOTE: DJ names/bios are placeholders — Dus to supply the real lineup;
+	// the markup must be updated in the same change as the page copy.
+	// Placeholder events carry no Event JSON-LD (their pages publish no Event
+	// entity), so performerIn must not reference them either — only real
+	// events are named in structured data. The visible "Upcoming nights"
+	// list on the page is unchanged.
+	const PLACEHOLDER_EVENT_SLUGS = new Set([
+		'lorem-ipsum-dolor-sit-amet-conse',
+		'excepteur-sint-occaecat-cupidatat',
+		'sunt-in-culpa-qui-officia'
+	]);
+	const jsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		'@id': `${SITE_URL}/djs/${dj.slug}/#dj`,
+		name: dj.name,
+		jobTitle: 'Resident DJ',
+		description: dj.bio,
+		image: `${SITE_URL}${dj.image}`,
+		url: `${SITE_URL}/djs/${dj.slug}/`,
+		performerIn: upcoming
+			.filter((event) => !PLACEHOLDER_EVENT_SLUGS.has(event.slug))
+			.map((event) => ({
+				'@type': 'Event',
+				name: event.title,
+				url: `${SITE_URL}/events/${event.slug}/`
+			}))
+	};
 </script>
 
 <Seo
@@ -15,6 +48,9 @@
 	path="/djs/{dj.slug}/"
 	image={dj.image}
 />
+<svelte:head>
+	{@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
+</svelte:head>
 
 <article class="mx-auto w-full max-w-[780px] px-4 pt-10 pb-16 md:pt-14">
 	<p class="font-condensed text-sm font-bold tracking-[0.25em] text-pink uppercase">

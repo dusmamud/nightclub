@@ -40,12 +40,12 @@
 			bind:value={email}
 			aria-invalid={error ? 'true' : undefined}
 			aria-describedby={error ? errorId : undefined}
-			class="min-h-12 flex-1 rounded-full border border-white/20 bg-panel px-5 text-base text-white placeholder:text-neutral-500 focus:border-pink focus:outline-none"
+			class="min-h-12 min-w-0 flex-1 rounded-full border border-white/20 bg-panel px-5 text-base text-white placeholder:text-neutral-500 focus:border-pink focus:outline-none"
 			placeholder="Your email address"
 		/>
 		<button
 			type="submit"
-			class="btn-press inline-flex min-h-12 items-center justify-center rounded-full bg-pink px-7 font-condensed text-sm font-bold tracking-[0.2em] text-white uppercase hover:bg-pink-dark"
+			class="btn-press inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-pink px-7 font-condensed text-sm font-bold tracking-[0.2em] text-white uppercase hover:bg-pink-dark"
 		>
 			Subscribe
 		</button>

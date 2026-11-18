@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
+	import { srcsetFor } from '#lib/images';
 	import { DJS, eventsForDj } from '#lib/data';
 </script>
 
@@ -27,6 +28,8 @@
 					<span class="block overflow-hidden rounded-2xl bg-[#232323]">
 						<img
 							src={dj.image}
+							srcset={srcsetFor(dj.image)}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
 							alt={dj.imageAlt}
 							width="1920"
 							height="1280"

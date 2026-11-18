@@ -1,12 +1,33 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import NewsCard from '#lib/components/NewsCard.svelte';
-	import { NEWS } from '#lib/data';
+	import { NEWS, SITE_URL } from '#lib/data';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const item = NEWS.find((n) => n.slug === data.slug)!;
 	const others = NEWS.filter((n) => n.slug !== data.slug).slice(0, 2);
+
+	// NewsArticle JSON-LD — ONLY the 2 real articles. The 4 lorem-ipsum news
+	// items get no markup until real headlines/body exist (audit-3, item 14).
+	// dateModified omitted: no edit has happened. Publisher omitted: not in
+	// Google's Article property list. Author is the club itself (unbylined).
+	const REAL_ARTICLES = new Set(['new-resident-dj-season', 'lights-upgrade-dancefloor']);
+	const jsonLd = REAL_ARTICLES.has(item.slug)
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'NewsArticle',
+				headline: item.title,
+				image: `${SITE_URL}${item.image}`,
+				datePublished: `${item.iso}T00:00:00+00:00`,
+				author: {
+					'@type': 'Organization',
+					name: 'Night Club',
+					url: `${SITE_URL}/`
+				},
+				url: `${SITE_URL}/news/${item.slug}/`
+			}
+		: null;
 </script>
 
 <Seo
@@ -16,6 +37,11 @@
 	image={item.image}
 	type="article"
 />
+<svelte:head>
+	{#if jsonLd}
+		{@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
+	{/if}
+</svelte:head>
 
 <article class="mx-auto w-full max-w-[780px] px-4 pt-10 pb-16 md:pt-14">
 	<p class="font-condensed text-sm font-bold tracking-[0.25em] text-pink uppercase">

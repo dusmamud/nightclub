@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
+	import { srcsetFor } from '#lib/images';
 	import { OPENING_HOURS, ROOMS } from '#lib/data';
 </script>
 
@@ -18,6 +19,8 @@
 	<div class="reveal mt-6 overflow-hidden rounded-2xl" use:reveal>
 		<img
 			src="/images/plunge-dj.jpg"
+			srcset="/images/plunge-dj-400.jpg 400w, /images/plunge-dj-800.jpg 800w, /images/plunge-dj-1200.jpg 1200w, /images/plunge-dj.jpg 1600w"
+			sizes="(min-width: 768px) 748px, calc(100vw - 32px)"
 			alt="DJ with headphones pointing at the crowd"
 			width="1920"
 			height="1280"
@@ -60,6 +63,8 @@
 				<span class="block overflow-hidden rounded-2xl bg-[#232323]">
 					<img
 						src={room.image}
+						srcset={srcsetFor(room.image)}
+						sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
 						alt={room.imageAlt}
 						width="1920"
 						height="1280"

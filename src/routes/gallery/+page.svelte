@@ -4,6 +4,7 @@
 	import { motionDuration } from '#lib/motion';
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
+	import { srcsetFor } from '#lib/images';
 	import { GALLERY } from '#lib/data';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
@@ -94,6 +95,8 @@
 				<span class="reveal block" use:reveal style="transition-delay: {(i % 3) * 50}ms">
 					<img
 						src={item.src}
+						srcset={srcsetFor(item.src)}
+						sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
 						alt={item.alt}
 						width="1920"
 						height="1280"
@@ -148,6 +151,8 @@
 		<figure class="max-h-full max-w-3xl" in:scale={{ duration: motionDuration(220), start: 0.96, opacity: 0 }}>
 			<img
 				src={current.src}
+				srcset={srcsetFor(current.src)}
+				sizes="(min-width: 800px) 768px, calc(100vw - 32px)"
 				alt={current.alt}
 				width="1920"
 				height="1280"

@@ -27,6 +27,8 @@
 <section class="relative -mt-[4.25rem] overflow-hidden bg-[#8a8a8a] pt-[4.25rem] md:-mt-[5.5rem] md:pt-[5.5rem]">
 	<img
 		src="/images/hero-crowd.jpg"
+		srcset="/images/hero-crowd-400.jpg 400w, /images/hero-crowd-800.jpg 800w, /images/hero-crowd-1200.jpg 1200w, /images/hero-crowd.jpg 1600w"
+		sizes="100vw"
 		alt="Crowd dancing at Night Club"
 		width="1920"
 		height="1280"
@@ -63,6 +65,8 @@
 	<div class="absolute inset-0" use:reveal>
 		<img
 			src="/images/plunge-dj.jpg"
+			srcset="/images/plunge-dj-400.jpg 400w, /images/plunge-dj-800.jpg 800w, /images/plunge-dj-1200.jpg 1200w, /images/plunge-dj.jpg 1600w"
+			sizes="100vw"
 			alt=""
 			width="1920"
 			height="1280"
@@ -83,11 +87,17 @@
 				aliquip ex ea commodo consequat.
 			</p>
 			<p class="mt-5">
+				<!-- Visually identical "Read more": the sr-only suffix makes the
+				     link text descriptive ("Read more about Night Club") for the
+				     Lighthouse SEO link-text audit and screen readers. Home was
+				     the only page scoring SEO 92 and the only tested page with a
+				     generic link; title, meta description, canonical, viewport
+				     and alt text were all verified present. -->
 				<a
 					href="/about/"
 					class="font-condensed text-sm font-bold tracking-[0.2em] text-pink uppercase transition-colors hover:text-white"
 				>
-					Read more
+					Read more <span class="sr-only">about Night Club</span>
 				</a>
 			</p>
 		</div>
@@ -98,6 +108,8 @@
 <section class="relative overflow-hidden bg-[#150710]">
 	<img
 		src="/images/news-bokeh.jpg"
+		srcset="/images/news-bokeh-400.jpg 400w, /images/news-bokeh-800.jpg 800w, /images/news-bokeh-1200.jpg 1200w, /images/news-bokeh.jpg 1600w"
+		sizes="100vw"
 		alt=""
 		width="1920"
 		height="1280"
