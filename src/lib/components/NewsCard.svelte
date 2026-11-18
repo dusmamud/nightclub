@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tilt } from '#lib/actions/tilt';
-	import { srcsetFor } from '#lib/images';
+	import { srcsetFor, pictureSrcsets } from '#lib/images';
 	import type { NewsItem } from '#lib/data';
 
 	// compact: home teaser — excerpt clamped to ~6 lines like the reference
@@ -10,22 +10,28 @@
 	// image (news-disco.jpg) and must be eager + fetchpriority high, never lazy.
 	let { item, compact = false, priority = false }: { item: NewsItem; compact?: boolean; priority?: boolean } =
 		$props();
+
+	const pic = $derived(pictureSrcsets(item.image));
 </script>
 
 <article class="group card-lift flex items-start gap-4 md:gap-4">
 	<a href="/news/{item.slug}/" class="tilt shrink-0" use:tilt aria-label={item.title}>
-		<img
-			src={item.image}
-			srcset={srcsetFor(item.image)}
-			sizes="(min-width: 768px) 200px, 128px"
-			alt={item.imageAlt}
-			width="1600"
-			height="1600"
-			loading={priority ? 'eager' : 'lazy'}
-			fetchpriority={priority ? 'high' : undefined}
-			decoding="async"
-			class="aspect-square w-32 rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[12.5rem]"
-		/>
+		<picture class="contents">
+			<source type="image/avif" srcset={pic?.avif} sizes="(min-width: 768px) 200px, 128px" />
+			<source type="image/webp" srcset={pic?.webp} sizes="(min-width: 768px) 200px, 128px" />
+			<img
+				src={item.image}
+				srcset={srcsetFor(item.image)}
+				sizes="(min-width: 768px) 200px, 128px"
+				alt={item.imageAlt}
+				width="1600"
+				height="1600"
+				loading={priority ? 'eager' : 'lazy'}
+				fetchpriority={priority ? 'high' : undefined}
+				decoding="async"
+				class="aspect-square w-32 rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[12.5rem]"
+			/>
+		</picture>
 	</a>
 	<div class="min-w-0 pt-1">
 		<!-- h2, not h3: on /news/ these cards sit directly under the h1, so h3

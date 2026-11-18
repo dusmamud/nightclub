@@ -22,11 +22,12 @@
 //   full-width backgrounds -> 400w (DPR1 phone) / 800w (DPR2 phone, DPR1 tablet)
 //                             / 1200w (DPR1 801–1200px viewport)
 //
-// WebP/AVIF: only the 10 files below have modern-format variants on disk
+// WebP/AVIF: the 17 files below have modern-format variants on disk
 // (the 4 full-width backgrounds + the 6 gallery images —
-// audit-3/webp-avif). Circle thumbnails (event-*/news-*) are JPEG-only by
-// design; srcsetFor(..., 'webp' | 'avif') returns undefined for them, so a
-// <picture> for a circle must not be built from this helper.
+// audit-3/webp-avif — + the 7 circle thumbnails event-*/news-* —
+// audit-3 batch 3). Every other file in VARIANTS is JPEG-only —
+// asking for 'webp'/'avif' for one returns undefined, so a <picture>
+// built from this helper can never point at a file that does not exist.
 
 const VARIANTS: Record<string, { full: number; widths: number[] }> = {
 	// 800x800 circle images
@@ -54,7 +55,7 @@ const VARIANTS: Record<string, { full: number; widths: number[] }> = {
 
 export type ImageFormat = 'jpg' | 'webp' | 'avif';
 
-// The 10 files that have WebP/AVIF variants on disk, mirroring the JPEG
+// The 17 files that have WebP/AVIF variants on disk, mirroring the JPEG
 // variant widths exactly (same source, same resize, same widths; the
 // full-width variant is <base>.webp / <base>.avif). Every other file in
 // VARIANTS is JPEG-only — asking for 'webp'/'avif' for one returns
@@ -70,7 +71,14 @@ const MODERN_FORMATS: Record<string, true> = {
 	'gallery-crowd.jpg': true,
 	'gallery-dancefloor.jpg': true,
 	'gallery-djbooth.jpg': true,
-	'gallery-lights.jpg': true
+	'gallery-lights.jpg': true,
+	'event-1.jpg': true,
+	'event-2.jpg': true,
+	'event-3.jpg': true,
+	'news-dancer.jpg': true,
+	'news-disco.jpg': true,
+	'news-dj.jpg': true,
+	'news-friends.jpg': true
 };
 
 export function srcsetFor(src: string, format: ImageFormat = 'jpg'): string | undefined {

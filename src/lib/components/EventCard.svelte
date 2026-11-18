@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { tilt } from '#lib/actions/tilt';
-	import { srcsetFor } from '#lib/images';
+	import { srcsetFor, pictureSrcsets } from '#lib/images';
 	import type { EventItem } from '#lib/data';
 
 	let { event, priority = false }: { event: EventItem; priority?: boolean } = $props();
+
+	const pic = $derived(pictureSrcsets(event.image));
 
 	// Images render natively (no JS-gated fade): above-the-fold (hero) images
 	// are eager, and the dark placeholder behind them means a slow image
@@ -25,18 +27,22 @@
 			<span class="text-[0.85rem] font-semibold tracking-wider">{event.month}</span>
 		</span>
 		<span class="block overflow-hidden rounded-full bg-[#232323]">
-			<img
-				src={event.image}
-				srcset={srcsetFor(event.image)}
-				sizes="(min-width: 768px) 212px, 208px"
-				alt={event.imageAlt}
-				width="1600"
-				height="1600"
-				loading={priority ? 'eager' : 'lazy'}
-				fetchpriority={priority ? 'high' : undefined}
-				decoding="async"
-				class="aspect-square w-[13rem] rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[13.25rem]"
-			/>
+			<picture class="contents">
+				<source type="image/avif" srcset={pic?.avif} sizes="(min-width: 768px) 212px, 208px" />
+				<source type="image/webp" srcset={pic?.webp} sizes="(min-width: 768px) 212px, 208px" />
+				<img
+					src={event.image}
+					srcset={srcsetFor(event.image)}
+					sizes="(min-width: 768px) 212px, 208px"
+					alt={event.imageAlt}
+					width="1600"
+					height="1600"
+					loading={priority ? 'eager' : 'lazy'}
+					fetchpriority={priority ? 'high' : undefined}
+					decoding="async"
+					class="aspect-square w-[13rem] rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[13.25rem]"
+				/>
+			</picture>
 		</span>
 	</a>
 	<!-- h2, not h3: on Home these cards sit directly under the sr-only h1, so
