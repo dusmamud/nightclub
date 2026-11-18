@@ -57,7 +57,7 @@
 
 <main id="main-content">
 	{#key key}
-		<div in:fly={{ y: 14, duration: motionDuration(350) }}>
+		<div in:fly={{ y: 14, duration: motionDuration(360) }}>
 			{@render children()}
 		</div>
 	{/key}

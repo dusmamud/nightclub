@@ -15,7 +15,9 @@ const STATIC_ROUTES = [
 	'/drinks/',
 	'/djs/',
 	'/faq/',
-	'/private-hire/'
+	'/private-hire/',
+	'/visit/',
+	'/safety/'
 ];
 
 export const GET: RequestHandler = () => {

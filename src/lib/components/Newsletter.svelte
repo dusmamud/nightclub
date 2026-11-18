@@ -1,7 +1,8 @@
 <script lang="ts">
 	// Newsletter signup — client-side only demo (no backend yet, same pattern
 	// as the contact form). Validates the email, then shows a success state.
-	let { idPrefix = 'newsletter' }: { idPrefix?: string } = $props();
+	// `compact` hides the disclaimer line so the form fits one slim footer row.
+	let { idPrefix = 'newsletter', compact = false }: { idPrefix?: string; compact?: boolean } = $props();
 
 	let email = $state('');
 	let done = $state(false);
@@ -29,7 +30,7 @@
 		</p>
 	</div>
 {:else}
-	<form novalidate onsubmit={submit} aria-label="Newsletter signup" class="flex flex-col gap-2 sm:flex-row">
+	<form novalidate onsubmit={submit} aria-label="Newsletter signup" class="flex gap-2 {compact ? 'flex-row' : 'flex-col sm:flex-row'}">
 		<label for={inputId} class="sr-only">Email address</label>
 		<input
 			id={inputId}
@@ -50,7 +51,9 @@
 		</button>
 	</form>
 	{#if error}<p id={errorId} class="mt-2 text-sm text-pink">{error}</p>{/if}
-	<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-		One email a week, about the next nights. No spam, unsubscribe anytime. Demo — nothing is sent yet.
-	</p>
+	{#if !compact}
+		<p class="mt-2 text-xs leading-relaxed text-neutral-500">
+			One email a week, about the next nights. No spam, unsubscribe anytime. Demo — nothing is sent yet.
+		</p>
+	{/if}
 {/if}

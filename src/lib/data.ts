@@ -296,6 +296,8 @@ export type DjItem = {
 	slug: string;
 	name: string;
 	genre: string;
+	/** e.g. "Friday resident" — which night of the week this DJ holds down. */
+	residentNight: string;
 	image: string;
 	imageAlt: string;
 	bio: string;
@@ -306,6 +308,7 @@ export const DJS: DjItem[] = [
 		slug: 'dj-nova',
 		name: 'DJ Nova',
 		genre: 'House & disco',
+		residentNight: 'Friday resident',
 		image: '/images/gallery-djbooth.jpg',
 		imageAlt: 'DJ Nova at the booth',
 		bio: 'Our Friday resident. House and disco built for the floor — long blends, mirror-ball moments, and a closing set that runs until dawn.'
@@ -314,6 +317,7 @@ export const DJS: DjItem[] = [
 		slug: 'dj-pulse',
 		name: 'DJ Pulse',
 		genre: 'Techno & peak-time',
+		residentNight: 'Saturday resident',
 		image: '/images/gallery-lights.jpg',
 		imageAlt: 'DJ Pulse under the lights',
 		bio: 'Our Saturday resident. Peak-time techno and driving bass — the loudest hours of the week, from midnight until the lights come up.'
@@ -322,6 +326,7 @@ export const DJS: DjItem[] = [
 		slug: 'dj-luna',
 		name: 'DJ Luna',
 		genre: 'R&B & hip-hop',
+		residentNight: 'Thursday resident',
 		image: '/images/gallery-crowd.jpg',
 		imageAlt: 'DJ Luna playing to the crowd',
 		bio: 'Our midweek resident. R&B, hip-hop and party classics — the warm-up that turns into the main event.'
@@ -479,6 +484,60 @@ export function ticketTiers(event: EventItem): TicketTier[] {
 		{ name: 'General admission', price: event.price, note: 'Standard entry, any time until last entry 01:00.' },
 		{ name: 'VIP entry', price: `$${base * 2 + 10}`, note: 'Priority entry lane and cloakroom included.' }
 	];
+}
+
+// --- Round 3 data -----------------------------------------------------------
+// Weekly program: the recurring week, derived from the opening-hours table and
+// the resident-DJ mapping above — not new facts, just the regular pattern
+// written down so a guest planning days ahead sees it. Nights follow the
+// opening hours (Thu–Fri 21:00–03:00, Sat 21:00–04:00).
+export type WeeklyNight = {
+	day: string;
+	night: string;
+	djSlug: string;
+	time: string;
+	note: string;
+};
+
+export const WEEKLY_PROGRAM: WeeklyNight[] = [
+	{
+		day: 'Thursday',
+		night: 'Midweek session',
+		djSlug: 'dj-luna',
+		time: '21:00 – 03:00',
+		note: 'R&B & hip-hop with DJ Luna.'
+	},
+	{
+		day: 'Friday',
+		night: 'Friday headline',
+		djSlug: 'dj-nova',
+		time: '21:00 – 03:00',
+		note: 'House & disco with DJ Nova.'
+	},
+	{
+		day: 'Saturday',
+		night: 'Saturday peak',
+		djSlug: 'dj-pulse',
+		time: '21:00 – 04:00',
+		note: 'Techno & peak-time with DJ Pulse.'
+	}
+];
+
+// Past vs upcoming: a night counts as past only once the morning after it
+// ends (06:00), so a night still running after midnight still reads as
+// "tonight" rather than flipping to past mid-party.
+export function isPastEvent(event: EventItem, now = new Date()): boolean {
+	const end = new Date(`${event.iso}T06:00:00`);
+	end.setDate(end.getDate() + 1);
+	return now.getTime() > end.getTime();
+}
+
+export function upcomingEvents(now = new Date()): EventItem[] {
+	return EVENTS.filter((e) => !isPastEvent(e, now));
+}
+
+export function pastEvents(now = new Date()): EventItem[] {
+	return EVENTS.filter((e) => isPastEvent(e, now));
 }
 
 // Live open-now state from the opening-hours table (Thu–Fri 21:00–03:00, Sat 21:00–04:00).

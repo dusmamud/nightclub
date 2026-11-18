@@ -99,7 +99,7 @@
 						height="1280"
 						loading="lazy"
 						decoding="async"
-						class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						class="clip-img aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
 					/>
 					<span
 						class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pt-8 pb-3 font-condensed text-sm font-bold tracking-[0.2em] text-white uppercase"
@@ -117,9 +117,16 @@
 		id="lightbox-dialog"
 		role="dialog"
 		aria-modal="true"
+		tabindex="-1"
 		aria-label="Photo viewer: {current.caption}"
 		class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4"
 		transition:fade={{ duration: motionDuration(200) }}
+		onclick={(e) => {
+			if (e.target === e.currentTarget) close();
+		}}
+		onkeydown={(e) => {
+			if (e.key === 'Escape') close();
+		}}
 	>
 		<button
 			type="button"

@@ -12,6 +12,20 @@
 
 	const openState = getOpenState();
 
+	// Enquiry topics (round 3): ticket problems, lost property, safety,
+	// accessibility, private hire and artist submissions are distinguishable
+	// instead of landing in one generic pile.
+	const TOPICS = [
+		'General question',
+		'Tickets',
+		'Lost property',
+		'Safety concern',
+		'Accessibility',
+		'Private hire',
+		'Artist submissions'
+	] as const;
+
+	let topic = $state<(typeof TOPICS)[number]>('General question');
 	let name = $state('');
 	let email = $state('');
 	let message = $state('');
@@ -43,7 +57,9 @@
 		Contacts
 	</h1>
 	<p class="mt-3 max-w-[34rem] text-sm leading-relaxed text-neutral-400">
-		Table bookings, private hire and everything else — call us or send a message.
+		Table bookings, private hire and everything else — call us or send a message. Planning your night?
+		See the <a href="/visit/" class="text-pink hover:text-white">venue info page</a> for doors, entry rules
+		and lost property, or the <a href="/safety/" class="text-pink hover:text-white">safety page</a>.
 	</p>
 
 	<div class="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
@@ -140,7 +156,7 @@
 				>
 					<h2 class="font-condensed text-2xl font-bold tracking-wide uppercase">Message received</h2>
 					<p class="mt-2 text-sm leading-relaxed text-neutral-300">
-						Thanks, {name.trim()} — your message has been noted. This form is a demo for now: it does
+						Thanks, {name.trim()} — your message about "{topic}" has been noted. This form is a demo for now: it does
 						not send email yet, so for bookings please call us on
 						<a href={PHONE_HREF} class="text-pink hover:text-white">{PHONE}</a>.
 					</p>
@@ -159,6 +175,23 @@
 				</div>
 			{:else}
 				<form novalidate onsubmit={submit} class="space-y-5" aria-label="Contact form">
+					<div>
+						<label for="contact-topic" class="mb-1 block font-condensed text-sm font-bold tracking-widest uppercase">What is this about?</label>
+						<select
+							id="contact-topic"
+							name="topic"
+							bind:value={topic}
+							class="min-h-12 w-full appearance-none rounded-lg border border-white/20 bg-panel px-4 text-base text-white focus:border-pink focus:outline-none"
+						>
+							{#each TOPICS as t (t)}
+								<option value={t}>{t}</option>
+							{/each}
+						</select>
+						<p class="mt-1 text-xs leading-relaxed text-neutral-500">
+							Lost something? Pick "Lost property" and tell us the night, where you were and what it looks like —
+							see also the <a href="/visit/" class="text-pink hover:text-white">venue info page</a>.
+						</p>
+					</div>
 					<div>
 						<label for="contact-name" class="mb-1 block font-condensed text-sm font-bold tracking-widest uppercase">Your name</label>
 						<input

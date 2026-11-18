@@ -25,6 +25,8 @@
 
 	let open = $state(false);
 	let scrolled = $state(false);
+	let progress = $state(0);
+	let motionOK = $state(true);
 	let path = $derived(page.url.pathname.replace(/\/$/, '') || '/');
 	function isActive(href: string) {
 		if (href === '/') return path === '/';
@@ -35,8 +37,11 @@
 	}
 
 	onMount(() => {
+		motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const onScroll = () => {
 			scrolled = window.scrollY > 24;
+			const max = document.documentElement.scrollHeight - window.innerHeight;
+			progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
 		};
 		onScroll();
 		window.addEventListener('scroll', onScroll, { passive: true });
@@ -114,6 +119,11 @@
 			{/if}
 		</button>
 	</div>
+
+	<!-- Scroll-progress hairline: transform only, hidden under reduced motion. -->
+	{#if motionOK}
+		<div class="scroll-progress h-[2px] bg-pink" style="transform: scaleX({progress})" aria-hidden="true"></div>
+	{/if}
 
 	{#if open}
 		<nav

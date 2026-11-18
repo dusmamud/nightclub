@@ -12,6 +12,15 @@
 }
 
 @layer base {
+	:root {
+		/* Motion tokens — mirror src/lib/motion.ts MOTION (press 100, hover 160,
+		   state 240, sheet 360, reveal 560ms). */
+		--motion-press: 100ms;
+		--motion-hover: 160ms;
+		--motion-state: 240ms;
+		--motion-sheet: 360ms;
+		--motion-reveal: 560ms;
+	}
 	html {
 		scroll-behavior: smooth;
 		scroll-padding-top: 5.5rem;
@@ -54,31 +63,50 @@
 		opacity: 0;
 		transform: translateY(28px);
 		transition:
-			opacity 0.7s cubic-bezier(0.2, 0, 0, 1),
-			transform 0.7s cubic-bezier(0.2, 0, 0, 1);
+			opacity var(--motion-reveal) cubic-bezier(0.2, 0, 0, 1),
+			transform var(--motion-reveal) cubic-bezier(0.2, 0, 0, 1);
 		will-change: opacity, transform;
 	}
 	.reveal-armed.is-visible {
 		opacity: 1;
 		transform: none;
 	}
+	/* Clip-path sweep for images inside a revealed wrapper — one reveal shape
+	   for the site. The clip lives on the INNER img, never on the observed
+	   node (a fully clipped observed node never intersects — deadlock).
+	   No-JS: the wrapper has no .reveal-armed, so the img stays unclipped. */
+	.reveal-armed img.clip-img {
+		clip-path: inset(0 100% 0 0);
+		transition: clip-path var(--motion-reveal) cubic-bezier(0.2, 0, 0, 1);
+		will-change: clip-path;
+	}
+	.reveal-armed.is-visible img.clip-img {
+		clip-path: inset(0 0 0 0);
+	}
 	.card-lift {
 		transition:
-			transform 0.3s cubic-bezier(0.2, 0, 0, 1),
-			box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+			transform var(--motion-hover) cubic-bezier(0.2, 0, 0, 1),
+			box-shadow var(--motion-hover) cubic-bezier(0.2, 0, 0, 1);
 	}
 	.card-lift:hover {
 		transform: translateY(-6px);
 		box-shadow: 0 18px 40px -18px rgba(255, 23, 145, 0.45);
 	}
+	/* Tilt target: the JS tilt action writes an inline transform; keep the
+	   return home smooth. */
+	.tilt {
+		transition: transform var(--motion-hover) cubic-bezier(0.2, 0, 0, 1);
+	}
 	.badge-pop {
-		transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+		transition: transform var(--motion-hover) cubic-bezier(0.2, 0, 0, 1);
 	}
 	.group:hover .badge-pop {
 		transform: scale(1.08) rotate(-4deg);
 	}
 	/* Hero entrance: one load-time sequence, staggered by --d, total stagger
-	   capped ~500ms. Only transform + opacity. */
+	   capped ~500ms. Only transform + opacity. The animation is CSS-only and
+	   starts at first paint (render-blocking stylesheet), so slow JS can
+	   never leave the hero text invisible — delays are capped at 160ms. */
 	@keyframes hero-rise {
 		from {
 			opacity: 0;
@@ -90,20 +118,11 @@
 		}
 	}
 	.hero-enter {
-		animation: hero-rise 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+		animation: hero-rise 0.45s cubic-bezier(0.2, 0, 0, 1) both;
 		animation-delay: var(--d, 0ms);
 		will-change: opacity, transform;
 	}
-	/* Image fade-in on load: img starts transparent, .img-loaded flips it in.
-	   Used above the fold so a slow image never reads as a black hole. */
-	.img-fade {
-		opacity: 0;
-		transition: opacity 0.4s ease;
-	}
-	.img-fade.img-loaded {
-		opacity: 1;
-	}
-	/* Button press feedback: transform only, 100–150ms. */
+	/* Button press feedback: transform only, press token (100ms). */
 	.btn-press {
 		transition:
 			transform 0.12s cubic-bezier(0.2, 0, 0, 1),
@@ -134,6 +153,12 @@
 	.nav-link[aria-current='page']::after {
 		transform: scaleX(1);
 	}
+	/* Scroll-progress hairline under the header: JS sets scaleX(0–1).
+	   Transform only; hidden entirely under reduced motion (never rendered). */
+	.scroll-progress {
+		transform-origin: 0 50%;
+		transform: scaleX(0);
+	}
 	/* Upcoming-nights ticker: decorative marquee, transform only. */
 	@keyframes ticker-scroll {
 		from {
@@ -152,6 +177,24 @@
 	}
 }
 
+/* Ken Burns slow zoom on the hero background — transform only, and only
+   under prefers-reduced-motion: no-preference, so reduced-motion users get
+   the static final frame. */
+@media (prefers-reduced-motion: no-preference) {
+	@keyframes ken-burns {
+		from {
+			transform: scale(1);
+		}
+		to {
+			transform: scale(1.07);
+		}
+	}
+	.ken-burns {
+		animation: ken-burns 16s ease-in-out infinite alternate;
+		will-change: transform;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;
@@ -159,6 +202,10 @@
 	.reveal-armed {
 		opacity: 1;
 		transform: none;
+		transition: none;
+	}
+	.reveal-armed img.clip-img {
+		clip-path: none;
 		transition: none;
 	}
 	.card-lift,
@@ -171,9 +218,8 @@
 	.hero-enter {
 		animation: none;
 	}
-	.img-fade {
-		opacity: 1;
-		transition: none;
+	.ken-burns {
+		animation: none;
 	}
 	.btn-press:active {
 		transform: none;

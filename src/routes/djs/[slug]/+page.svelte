@@ -24,6 +24,9 @@
 		{dj.name}
 	</h1>
 	<p class="mt-2 font-condensed text-lg font-semibold tracking-widest text-pink uppercase">{dj.genre}</p>
+	<p class="mt-1 font-condensed text-sm font-bold tracking-widest text-neutral-400 uppercase">
+		{dj.residentNight} · Night Club Glasgow
+	</p>
 
 	<div class="mt-8 overflow-hidden rounded-2xl bg-[#232323]">
 		<img
@@ -37,6 +40,12 @@
 		/>
 	</div>
 	<p class="mt-6 max-w-[34rem] text-sm leading-relaxed text-neutral-300">{dj.bio}</p>
+
+	<h2 class="mt-12 font-condensed text-2xl font-bold tracking-wide uppercase md:text-3xl">Listen &amp; follow</h2>
+	<p class="mt-4 max-w-[34rem] text-sm leading-relaxed text-neutral-300">
+		Mixes and social links for {dj.name} will be listed here once the DJs publish them — no links are
+		shown until they are real. Until then, the nights below are the best place to hear them play.
+	</p>
 
 	<h2 class="mt-12 font-condensed text-2xl font-bold tracking-wide uppercase md:text-3xl">Upcoming nights</h2>
 	{#if upcoming.length > 0}

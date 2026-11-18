@@ -1,20 +1,27 @@
 <script lang="ts">
+	import { tilt } from '#lib/actions/tilt';
 	import type { EventItem } from '#lib/data';
 
 	let { event, priority = false }: { event: EventItem; priority?: boolean } = $props();
 
-	// Fade-in on load over a dark placeholder, so a slow image never renders
-	// as a black hole. Above-the-fold (hero) images are eager.
-	let loaded = $state(false);
+	// Images render natively (no JS-gated fade): above-the-fold (hero) images
+	// are eager, and the dark placeholder behind them means a slow image
+	// never reads as a black hole. The JS-gated fade was the round-3
+	// fresh-load regression — without JS the circles stayed invisible.
 </script>
 
 <article class="group card-lift flex flex-col items-center text-center">
-	<a href="/events/{event.slug}/" class="relative block" aria-label="{event.title} — {event.day} {event.monthName} {event.year}">
+	<a
+		href="/events/{event.slug}/"
+		class="tilt relative block"
+		use:tilt
+		aria-label="{event.title} — {event.day} {event.monthName} {event.year}"
+	>
 		<span
-			class="badge-pop absolute -top-3 left-1 z-10 flex h-[4.5rem] w-[4.5rem] flex-col items-center justify-center rounded-full bg-pink font-condensed leading-none text-white shadow-lg md:h-[5.25rem] md:w-[5.25rem]"
+			class="badge-pop absolute -top-3 left-1 z-10 flex h-[4.25rem] w-[4.25rem] flex-col items-center justify-center rounded-full bg-pink font-condensed leading-none text-white shadow-lg md:h-[4.875rem] md:w-[4.875rem]"
 		>
-			<span class="text-[1.6rem] font-bold md:text-[1.9rem]">{event.day}</span>
-			<span class="text-[0.95rem] font-semibold tracking-wider">{event.month}</span>
+			<span class="text-[1.5rem] font-bold md:text-[1.75rem]">{event.day}</span>
+			<span class="text-[0.85rem] font-semibold tracking-wider">{event.month}</span>
 		</span>
 		<span class="block overflow-hidden rounded-full bg-[#232323]">
 			<img
@@ -25,25 +32,22 @@
 				loading={priority ? 'eager' : 'lazy'}
 				fetchpriority={priority ? 'high' : undefined}
 				decoding="async"
-				onload={() => (loaded = true)}
-				class="img-fade aspect-square w-[13rem] rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[13.25rem] {loaded
-					? 'img-loaded'
-					: ''}"
+				class="aspect-square w-[13rem] rounded-full bg-[#232323] object-cover transition-transform duration-300 group-hover:scale-105 md:w-[13.25rem]"
 			/>
 		</span>
 	</a>
 	<h3 class="mt-5">
 		<a
 			href="/events/{event.slug}/"
-			class="inline-block bg-black/90 px-3 py-1.5 font-condensed text-lg leading-tight font-semibold tracking-wide text-white uppercase transition-colors hover:text-pink"
+			class="inline-block bg-black/90 px-3 py-1.5 font-condensed text-[0.95rem] leading-tight font-semibold tracking-wide text-white uppercase transition-colors hover:text-pink md:text-base"
 		>
 			{event.title}
 		</a>
 	</h3>
-	<p class="mt-3 max-w-[21rem] text-[0.82rem] leading-relaxed text-neutral-400">
+	<p class="mt-3 max-w-[22rem] text-[0.78rem] leading-relaxed text-neutral-400">
 		{event.excerpt}
 	</p>
-	<p class="mt-2 font-condensed text-sm font-semibold tracking-widest text-neutral-300">
+	<p class="mt-2 font-condensed text-[0.8rem] font-semibold tracking-widest text-neutral-300">
 		{event.time} · {event.price} · 18+
 	</p>
 </article>
