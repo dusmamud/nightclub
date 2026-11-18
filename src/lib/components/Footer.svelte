@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Newsletter from '#lib/components/Newsletter.svelte';
 	import { ADDRESS, PHONE, PHONE_HREF } from '#lib/data';
+	import { srcsetFor } from '#lib/images';
 
 	// Compact footer (round 3: was 393px, reference ~171px). The newsletter
 	// lives here only — one slim inline row beside the logo, no heading, no
@@ -22,17 +23,28 @@
 </script>
 
 <footer class="relative overflow-hidden">
-	<img
-		src="/images/footer-crowd.jpg"
-		srcset="/images/footer-crowd-400.jpg 400w, /images/footer-crowd-800.jpg 800w, /images/footer-crowd-1200.jpg 1200w, /images/footer-crowd.jpg 1600w"
-		sizes="100vw"
-		alt=""
-		width="1920"
-		height="1280"
-		loading="lazy"
-		decoding="async"
-		class="absolute inset-0 h-full w-full object-cover grayscale"
-	/>
+	<!-- <picture class="contents"> renders no box of its own, so the
+	     absolutely-positioned <img> behaves exactly as before; the
+	     <source> srcsets come from the same variant table as the JPEG
+	     srcset (src/lib/images.ts), AVIF first, WebP second, JPEG <img>
+	     fallback for browsers without either format. sizes is repeated on
+	     each <source>: a w-descriptor srcset without sizes defaults to
+	     100vw, which would be wrong anywhere sizes is not 100vw. -->
+	<picture class="contents">
+		<source type="image/avif" srcset={srcsetFor('/images/footer-crowd.jpg', 'avif')} sizes="100vw" />
+		<source type="image/webp" srcset={srcsetFor('/images/footer-crowd.jpg', 'webp')} sizes="100vw" />
+		<img
+			src="/images/footer-crowd.jpg"
+			srcset={srcsetFor('/images/footer-crowd.jpg')}
+			sizes="100vw"
+			alt=""
+			width="1920"
+			height="1280"
+			loading="lazy"
+			decoding="async"
+			class="absolute inset-0 h-full w-full object-cover grayscale"
+		/>
+	</picture>
 	<div class="absolute inset-0 bg-black/75"></div>
 	<div class="relative mx-auto w-full max-w-[780px] px-4 py-5">
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-8">

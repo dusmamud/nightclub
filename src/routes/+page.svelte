@@ -4,6 +4,7 @@
 	import NewsCard from '#lib/components/NewsCard.svelte';
 	import Countdown from '#lib/components/Countdown.svelte';
 	import { reveal } from '#lib/actions/reveal';
+	import { srcsetFor } from '#lib/images';
 	import { EVENTS, NEWS } from '#lib/data';
 
 	const heroEvents = EVENTS.slice(0, 3);
@@ -25,17 +26,26 @@
 <!-- HERO — crowd photo behind the header, three circular events with pink date badges.
      High-key B&W photo; the overlay is light so the bright photo shows through. -->
 <section class="relative -mt-[4.25rem] overflow-hidden bg-[#8a8a8a] pt-[4.25rem] md:-mt-[5.5rem] md:pt-[5.5rem]">
-	<img
-		src="/images/hero-crowd.jpg"
-		srcset="/images/hero-crowd-400.jpg 400w, /images/hero-crowd-800.jpg 800w, /images/hero-crowd-1200.jpg 1200w, /images/hero-crowd.jpg 1600w"
-		sizes="100vw"
-		alt="Crowd dancing at Night Club"
-		width="1920"
-		height="1280"
-		fetchpriority="high"
-		decoding="async"
-		class="ken-burns absolute inset-0 h-full w-full bg-[#8a8a8a] object-cover grayscale"
-	/>
+	<!-- <picture class="contents"> renders no box, so the absolute <img>
+	     behaves exactly as before. AVIF first, WebP second, JPEG fallback;
+	     all three srcsets from the same variant table (src/lib/images.ts).
+	     fetchpriority/loading/decoding/alt/width/height stay on the <img>
+	     only — <source> takes srcset/sizes/type only. -->
+	<picture class="contents">
+		<source type="image/avif" srcset={srcsetFor('/images/hero-crowd.jpg', 'avif')} sizes="100vw" />
+		<source type="image/webp" srcset={srcsetFor('/images/hero-crowd.jpg', 'webp')} sizes="100vw" />
+		<img
+			src="/images/hero-crowd.jpg"
+			srcset={srcsetFor('/images/hero-crowd.jpg')}
+			sizes="100vw"
+			alt="Crowd dancing at Night Club"
+			width="1920"
+			height="1280"
+			fetchpriority="high"
+			decoding="async"
+			class="ken-burns absolute inset-0 h-full w-full bg-[#8a8a8a] object-cover grayscale"
+		/>
+	</picture>
 	<div class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/60"></div>
 
 	<div class="relative mx-auto w-full max-w-[780px] px-4 pt-24 pb-8 md:pt-28 md:pb-10">
@@ -63,17 +73,21 @@
 <!-- PLUNGE -->
 <section class="relative overflow-hidden bg-[#141414]">
 	<div class="absolute inset-0" use:reveal>
-		<img
-			src="/images/plunge-dj.jpg"
-			srcset="/images/plunge-dj-400.jpg 400w, /images/plunge-dj-800.jpg 800w, /images/plunge-dj-1200.jpg 1200w, /images/plunge-dj.jpg 1600w"
-			sizes="100vw"
-			alt=""
-			width="1920"
-			height="1280"
-			loading="lazy"
-			decoding="async"
-			class="h-full w-full object-cover grayscale"
-		/>
+		<picture class="contents">
+			<source type="image/avif" srcset={srcsetFor('/images/plunge-dj.jpg', 'avif')} sizes="100vw" />
+			<source type="image/webp" srcset={srcsetFor('/images/plunge-dj.jpg', 'webp')} sizes="100vw" />
+			<img
+				src="/images/plunge-dj.jpg"
+				srcset={srcsetFor('/images/plunge-dj.jpg')}
+				sizes="100vw"
+				alt=""
+				width="1920"
+				height="1280"
+				loading="lazy"
+				decoding="async"
+				class="h-full w-full object-cover grayscale"
+			/>
+		</picture>
 	</div>
 	<div class="absolute inset-0 bg-black/45"></div>
 	<div class="relative mx-auto w-full max-w-[780px] px-4 py-6 md:py-8">
@@ -106,17 +120,21 @@
 
 <!-- LATEST NEWS -->
 <section class="relative overflow-hidden bg-[#150710]">
-	<img
-		src="/images/news-bokeh.jpg"
-		srcset="/images/news-bokeh-400.jpg 400w, /images/news-bokeh-800.jpg 800w, /images/news-bokeh-1200.jpg 1200w, /images/news-bokeh.jpg 1600w"
-		sizes="100vw"
-		alt=""
-		width="1920"
-		height="1280"
-		loading="lazy"
-		decoding="async"
-		class="absolute inset-0 h-full w-full object-cover"
-	/>
+	<picture class="contents">
+		<source type="image/avif" srcset={srcsetFor('/images/news-bokeh.jpg', 'avif')} sizes="100vw" />
+		<source type="image/webp" srcset={srcsetFor('/images/news-bokeh.jpg', 'webp')} sizes="100vw" />
+		<img
+			src="/images/news-bokeh.jpg"
+			srcset={srcsetFor('/images/news-bokeh.jpg')}
+			sizes="100vw"
+			alt=""
+			width="1920"
+			height="1280"
+			loading="lazy"
+			decoding="async"
+			class="absolute inset-0 h-full w-full object-cover"
+		/>
+	</picture>
 	<div class="absolute inset-0 bg-black/55"></div>
 	<div class="relative mx-auto w-full max-w-[780px] px-4 py-6 md:py-8">
 		<h2 class="reveal font-condensed text-[2.4rem] font-semibold tracking-wide text-white uppercase md:text-[2.6rem]" use:reveal>

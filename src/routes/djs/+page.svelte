@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
-	import { srcsetFor } from '#lib/images';
+	import { srcsetFor, pictureSrcsets } from '#lib/images';
 	import { DJS, eventsForDj } from '#lib/data';
 </script>
 
@@ -23,20 +23,33 @@
 
 	<div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
 		{#each DJS as dj, i (dj.slug)}
+			{@const pic = pictureSrcsets(dj.image)}
 			<article class="reveal group card-lift" use:reveal style="transition-delay: {i * 50}ms">
 				<a href="/djs/{dj.slug}/" class="block" aria-label="{dj.name} — {dj.genre}">
 					<span class="block overflow-hidden rounded-2xl bg-[#232323]">
-						<img
-							src={dj.image}
-							srcset={srcsetFor(dj.image)}
-							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
-							alt={dj.imageAlt}
-							width="1920"
-							height="1280"
-							loading="lazy"
-							decoding="async"
-							class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-						/>
+						<picture class="contents">
+							<source
+								type="image/avif"
+								srcset={pic?.avif}
+								sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+							/>
+							<source
+								type="image/webp"
+								srcset={pic?.webp}
+								sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+							/>
+							<img
+								src={dj.image}
+								srcset={srcsetFor(dj.image)}
+								sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+								alt={dj.imageAlt}
+								width="1920"
+								height="1280"
+								loading="lazy"
+								decoding="async"
+								class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+							/>
+						</picture>
 					</span>
 					<h2 class="mt-4 font-condensed text-2xl font-bold tracking-wide text-white uppercase transition-colors group-hover:text-pink">
 						{dj.name}

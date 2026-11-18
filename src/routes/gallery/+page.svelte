@@ -4,7 +4,7 @@
 	import { motionDuration } from '#lib/motion';
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
-	import { srcsetFor } from '#lib/images';
+	import { srcsetFor, pictureSrcsets } from '#lib/images';
 	import { GALLERY } from '#lib/data';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
@@ -86,6 +86,7 @@
 	</p>
 	<div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
 		{#each GALLERY as item, i (item.src)}
+			{@const pic = pictureSrcsets(item.src)}
 			<button
 				type="button"
 				class="group card-lift relative block overflow-hidden rounded-xl text-left"
@@ -93,17 +94,29 @@
 				onclick={(e) => open(i, e.currentTarget)}
 			>
 				<span class="reveal block" use:reveal style="transition-delay: {(i % 3) * 50}ms">
-					<img
-						src={item.src}
-						srcset={srcsetFor(item.src)}
-						sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
-						alt={item.alt}
-						width="1920"
-						height="1280"
-						loading="lazy"
-						decoding="async"
-						class="clip-img aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-					/>
+					<picture class="contents">
+						<source
+							type="image/avif"
+							srcset={pic?.avif}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+						/>
+						<source
+							type="image/webp"
+							srcset={pic?.webp}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+						/>
+						<img
+							src={item.src}
+							srcset={srcsetFor(item.src)}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+							alt={item.alt}
+							width="1920"
+							height="1280"
+							loading="lazy"
+							decoding="async"
+							class="clip-img aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						/>
+					</picture>
 					<span
 						class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-3 pt-8 pb-3 font-condensed text-sm font-bold tracking-[0.2em] text-white uppercase"
 					>
@@ -116,6 +129,7 @@
 </section>
 
 {#if current !== null && openIndex !== null}
+	{@const lb = pictureSrcsets(current.src)}
 	<div
 		id="lightbox-dialog"
 		role="dialog"
@@ -149,16 +163,20 @@
 			<ChevronLeft size={28} aria-hidden="true" />
 		</button>
 		<figure class="max-h-full max-w-3xl" in:scale={{ duration: motionDuration(220), start: 0.96, opacity: 0 }}>
-			<img
-				src={current.src}
-				srcset={srcsetFor(current.src)}
-				sizes="(min-width: 800px) 768px, calc(100vw - 32px)"
-				alt={current.alt}
-				width="1920"
-				height="1280"
-				decoding="async"
-				class="max-h-[78vh] w-auto max-w-full rounded-lg object-contain"
-			/>
+			<picture class="contents">
+				<source type="image/avif" srcset={lb?.avif} sizes="(min-width: 800px) 768px, calc(100vw - 32px)" />
+				<source type="image/webp" srcset={lb?.webp} sizes="(min-width: 800px) 768px, calc(100vw - 32px)" />
+				<img
+					src={current.src}
+					srcset={srcsetFor(current.src)}
+					sizes="(min-width: 800px) 768px, calc(100vw - 32px)"
+					alt={current.alt}
+					width="1920"
+					height="1280"
+					decoding="async"
+					class="max-h-[78vh] w-auto max-w-full rounded-lg object-contain"
+				/>
+			</picture>
 			<figcaption class="mt-3 text-center font-condensed text-sm font-bold tracking-[0.2em] text-white uppercase">
 				{current.caption} · {openIndex + 1} of {GALLERY.length}
 			</figcaption>

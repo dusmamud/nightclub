@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Seo from '#lib/components/Seo.svelte';
 	import { reveal } from '#lib/actions/reveal';
-	import { srcsetFor } from '#lib/images';
+	import { srcsetFor, pictureSrcsets } from '#lib/images';
 	import { OPENING_HOURS, ROOMS } from '#lib/data';
 </script>
 
@@ -17,17 +17,29 @@
 		About
 	</h1>
 	<div class="reveal mt-6 overflow-hidden rounded-2xl" use:reveal>
-		<img
-			src="/images/plunge-dj.jpg"
-			srcset="/images/plunge-dj-400.jpg 400w, /images/plunge-dj-800.jpg 800w, /images/plunge-dj-1200.jpg 1200w, /images/plunge-dj.jpg 1600w"
-			sizes="(min-width: 768px) 748px, calc(100vw - 32px)"
-			alt="DJ with headphones pointing at the crowd"
-			width="1920"
-			height="1280"
-			loading="lazy"
-			decoding="async"
-			class="aspect-[16/9] w-full object-cover grayscale"
-		/>
+		<picture class="contents">
+			<source
+				type="image/avif"
+				srcset={srcsetFor('/images/plunge-dj.jpg', 'avif')}
+				sizes="(min-width: 768px) 748px, calc(100vw - 32px)"
+			/>
+			<source
+				type="image/webp"
+				srcset={srcsetFor('/images/plunge-dj.jpg', 'webp')}
+				sizes="(min-width: 768px) 748px, calc(100vw - 32px)"
+			/>
+			<img
+				src="/images/plunge-dj.jpg"
+				srcset={srcsetFor('/images/plunge-dj.jpg')}
+				sizes="(min-width: 768px) 748px, calc(100vw - 32px)"
+				alt="DJ with headphones pointing at the crowd"
+				width="1920"
+				height="1280"
+				loading="lazy"
+				decoding="async"
+				class="aspect-[16/9] w-full object-cover grayscale"
+			/>
+		</picture>
 	</div>
 	<div class="reveal mt-8 space-y-4 text-sm leading-relaxed text-neutral-300" use:reveal>
 		<p>
@@ -59,19 +71,32 @@
 	<h2 id="rooms" class="mt-12 scroll-mt-28 font-condensed text-2xl font-bold tracking-wide uppercase md:text-3xl">Rooms &amp; areas</h2>
 	<div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
 		{#each ROOMS as room, i (room.name)}
+			{@const pic = pictureSrcsets(room.image)}
 			<article class="reveal group card-lift" use:reveal style="transition-delay: {i * 50}ms">
 				<span class="block overflow-hidden rounded-2xl bg-[#232323]">
-					<img
-						src={room.image}
-						srcset={srcsetFor(room.image)}
-						sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
-						alt={room.imageAlt}
-						width="1920"
-						height="1280"
-						loading="lazy"
-						decoding="async"
-						class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
-					/>
+					<picture class="contents">
+						<source
+							type="image/avif"
+							srcset={pic?.avif}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+						/>
+						<source
+							type="image/webp"
+							srcset={pic?.webp}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+						/>
+						<img
+							src={room.image}
+							srcset={srcsetFor(room.image)}
+							sizes="(min-width: 768px) 239px, (min-width: 640px) calc((100vw - 48px) / 2), calc(100vw - 32px)"
+							alt={room.imageAlt}
+							width="1920"
+							height="1280"
+							loading="lazy"
+							decoding="async"
+							class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						/>
+					</picture>
 				</span>
 				<h3 class="mt-4 font-condensed text-xl font-bold tracking-wide text-white uppercase">{room.name}</h3>
 				<p class="mt-1 text-sm leading-relaxed text-neutral-400">{room.desc}</p>
